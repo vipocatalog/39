@@ -1,0 +1,384 @@
+/* מודרני Theme */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #34495e;
+    --background-color: #ecf0f1;
+    --text-color: #2c3e50;
+    --accent-color: #3498db;
+    --page-border: 1px solid rgba(0, 0, 0, 0.1);
+    --page-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    direction: rtl;
+}
+
+.flipbook-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.flipbook-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.flipbook-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controls button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.controls button:hover {
+    background-color: var(--secondary-color);
+}
+
+.flipbook-viewer {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background-color);
+    overflow: hidden;
+    position: relative;
+}
+
+#book {
+    height: 90%;
+    width: 95%;
+    max-width: 1600px;
+    position: relative;
+    perspective: 1500px;
+    display: flex;
+    justify-content: center;
+    transform-style: preserve-3d;
+}
+
+.page {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    transition: transform 0.8s, box-shadow 0.5s;
+    background-color: white;
+    background-size: cover;
+    background-position: center;
+    box-shadow: var(--page-shadow);
+    cursor: pointer;
+    overflow: hidden;
+    border: var(--page-border);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.right-page {
+    transform-origin: left center;
+    right: 0;
+    border-radius: 0 5px 5px 0;
+    border-left: none;
+}
+
+.left-page {
+    transform-origin: right center;
+    right: 50%;
+    border-radius: 5px 0 0 5px;
+    border-right: none;
+}
+
+.page.flipped {
+    transform: rotateY(-180deg);
+}
+
+.right-page.flipped {
+    transform: rotateY(-180deg);
+    z-index: 1;
+}
+
+.left-page.flipped {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+.page-shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 10%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+}
+
+.left-page .page-shadow {
+    background: linear-gradient(to left, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 10%);
+}
+
+.page:hover .page-shadow {
+    opacity: 1;
+}
+
+.page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden;
+    position: relative;
+    background-color: white;
+    padding: 10px;
+}
+
+.page-number {
+    position: absolute;
+    bottom: 10px;
+    font-size: 12px;
+    color: #666;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.right-page .page-number {
+    left: 10px;
+}
+
+.left-page .page-number {
+    right: 10px;
+}
+
+.page-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* התמונות הממוזערות הוסרו */
+.flipbook-thumbnails {
+    display: none;
+}
+
+.thumbnails-container {
+    display: none;
+}
+
+.thumbnail {
+    display: none;
+}
+
+.flipbook-footer {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* Fullscreen mode */
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: var(--background-color);
+    overflow: hidden;
+}
+
+.fullscreen #book {
+    height: 80%;
+    width: 90%;
+    max-width: 1400px;
+}
+
+.fullscreen .flipbook-thumbnails {
+    display: none;
+}
+
+/* Mobile specific styles */
+.mobile #book {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Portrait mode (mobile) */
+.mobile.portrait #book {
+    width: 95%;
+    height: 75%;
+    margin: 0 auto;
+}
+
+.mobile.portrait .page {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+.mobile.portrait .page-content img {
+    border-radius: 5px;
+    object-fit: contain;
+}
+
+/* Landscape mode (mobile) */
+.mobile.landscape #book {
+    width: 95%;
+    height: 80%;
+}
+
+.mobile.landscape .flipbook-header {
+    padding: 3px;
+}
+
+.mobile.landscape .flipbook-footer {
+    padding: 3px;
+}
+
+.fullscreen .flipbook-footer {
+    padding: 5px;
+}
+
+/* Responsive adjustments - שיפורים למכשירים ניידים */
+
+/* התאמות למכשירים ניידים באופן כללי */
+@media (max-width: 768px) {
+    .flipbook-header {
+        flex-direction: column;
+        gap: 5px;
+        padding: 5px;
+    }
+    
+    .flipbook-header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .controls {
+        gap: 5px;
+    }
+    
+    .controls button {
+        padding: 3px 8px;
+        font-size: 0.9rem;
+    }
+    
+    #book {
+        width: 98%;
+        height: 80%;
+        max-width: none;
+    }
+    
+    .page-content img {
+        max-height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+    
+    .flipbook-footer {
+        padding: 5px;
+        font-size: 0.7rem;
+    }
+}
+
+/* התאמות למכשירים ניידים במצב אנכי (פורטרט) */
+@media (max-width: 768px) and (orientation: portrait) {
+    #book {
+        height: 75%;
+        width: 98%;
+    }
+    
+    .page {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    
+    .left-page, .right-page {
+        width: 100%;
+        right: 0;
+        border-radius: 5px;
+    }
+    
+    .page-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 0 auto;
+    }
+}
+
+/* התאמות למכשירים ניידים במצב אופקי (לנדסקייפ) */
+@media (max-width: 768px) and (orientation: landscape) {
+    .flipbook-header {
+        padding: 3px;
+    }
+    
+    .flipbook-header h1 {
+        font-size: 1rem;
+    }
+    
+    #book {
+        height: 85%;
+        width: 98%;
+    }
+    
+    .page-content {
+        padding: 5px;
+    }
+}
+
+/* התאמות למכשירים קטנים במיוחד */
+@media (max-width: 480px) {
+    .flipbook-header h1 {
+        font-size: 1rem;
+    }
+    
+    .controls button {
+        padding: 2px 6px;
+        font-size: 0.8rem;
+    }
+    
+    #book {
+        height: 75%;
+    }
+    
+    .flipbook-footer {
+        font-size: 0.6rem;
+    }
+}
